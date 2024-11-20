@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Bot</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS (Optional) -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            font-size: 1.25rem;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        #responseMessage {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <!-- Main Card -->
+    <div class="card shadow-sm">
+        <div class="card-header text-center">
+            <h2>Execute Bot</h2>
+        </div>
+        <div class="card-body">
+            <!-- Form to Select Bot and Details -->
+            <form id="botForm">
+                <div class="form-group">
+                    <label for="botName">Select a Bot:</label>
+                    <select class="form-control" id="botName" required>
+                        <option value="example1">Example 1</option>
+                        <option value="example2">Example 2</option>
+                        <option value="example3">Example 3</option>
+                        <option value="example4">Example 4</option>
+                        <option value="example5">Example 5</option>
+                    </select>
+                </div>
+
+                <!-- New Name input (Hidden by default) -->
+                <div class="form-group" id="newNameGroup" style="display: none;">
+                    <label for="newName">New Name:</label>
+                    <input type="text" class="form-control" id="newName" placeholder="Enter new name (optional)">
+                </div>
+
+                <div class="form-group">
+                    <label for="url">URL:</label>
+                    <input type="text" class="form-control" id="url" placeholder="Enter the URL" value="{{ url }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="user">User:</label>
+                    <input type="email" class="form-control" id="user" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pass">Password:</label>
+                    <input type="password" class="form-control" id="pass" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="downloadDir">Download Directory:</label>
+                    <input type="text" class="form-control" id="downloadDir" placeholder="Enter the download directory" value="{{ download_dir | escape }}" required>
+                </div>
+
+            
+                <button type="submit" class="btn btn-primary btn-block">Run Bot</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Response Message -->
+    <div id="responseMessage"></div>
+</div>
+
+<!-- Bootstrap and jQuery JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Mostrar u ocultar el campo new_Name según el bot seleccionado
+        $("#botName").on("change", function() {
+            const selectedBot = $(this).val();
+            
+            // Si se selecciona example2 o example4, mostrar el campo new_Name
+            if (selectedBot === "example2" || selectedBot === "example4") {
+                $("#newNameGroup").show();
+                $("#newName").prop("required", true);  // Hacer obligatorio el campo
+            } else {
+                $("#newNameGroup").hide();
+                $("#newName").prop("required", false); // Hacer no obligatorio el campo
+            }
+        });
+
+        // Ejecutar cuando se envíe el formulario
+        $("#botForm").on("submit", function(event) {
+            event.preventDefault();  // Prevenir el envío por defecto del formulario
+
+            // Obtener valores del formulario
+            const botName = $("#botName").val();
+            const url = $("#url").val();
+            const user = $("#user").val();
+            const pass = $("#pass").val();
+            const downloadDir = $("#downloadDir").val();
+            const newName = $("#newName").val();  // Obtener el valor de newName
+
+            // Preparar los datos para enviar
+            const data = {
+                url: url,
+                user: user,
+                pass: pass,
+                download_dir: downloadDir
+            };
+
+            // Si el bot seleccionado requiere newName, agregarlo al objeto data
+            if (botName === "example2" || botName === "example4") {
+                data.new_Name = newName;
+            }
+
+            // Realizar la solicitud AJAX
+            $.ajax({
+                url: "/bot/" + botName,
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function(response) {
+                    // Mostrar mensaje de éxito
+                    $("#responseMessage").html("<div class='alert alert-success'>Bot ejecutado correctamente: " + botName + "</div>");
+                },
+                error: function(xhr, status, error) {
+                    // Mostrar mensaje de error
+                    $("#responseMessage").html("<div class='alert alert-danger'>Error al ejecutar el bot: " + botName + "</div>");
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
