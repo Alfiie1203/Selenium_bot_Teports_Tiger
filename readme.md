@@ -43,11 +43,11 @@ The root directory of the project, containing the entire file structure.
 
 ### 2. **Back End**
 Contains several examples of how to download reports from the TIGER application. The files in this directory include:
-- **Example1.py**: Example of how to download a standard report in the TIGER application, saved with a default name.
-- **Example2.py**: Example of how to download a standard report in the TIGER application, saved with a user-defined name in the interface.
+- **Example1.py**: Example of how to download a `standard` report in the TIGER application, saved with a default name.
+- **Example2.py**: Example of how to download a `standard` report in the TIGER application, saved with a user-defined name in the interface.
 - **Example3.py**: Example of how to download a `get_my_data` report in the TIGER application, saved with a default name.
 - **Example4.py**: Example of how to download a `get_my_data` report in the TIGER application, saved with a user-defined name in the interface.
-- **Example5.py**: Example of how to download both a standard report and a `get_my_data` report in the TIGER application, without closing the driver controller.
+- **Example5.py**: Example of how to download both a `standard` report and a `get_my_data` report in the TIGER application, without closing the driver controller.
 - **routes.py**: A file that defines the routes for the Flask application and handles HTTP requests.
 
 ### 3. **Front End**
@@ -128,7 +128,7 @@ Place the downloaded driver in the corresponding directory under `ToolBook/Brows
 Once all dependencies are installed and configured, you can run the Flask server. Navigate to the `Back End` directory and run the following command:
 
 ```bash
-python ../Front\ End/app.py
+python ../Front_End/app.py
 ```
 
 This will start the Flask server. If everything is configured correctly, you should see something like this in the terminal:
@@ -146,15 +146,3 @@ http://127.0.0.1:5000
 ```
 
 You should be able to see the Flask application running correctly.
-
-### 8. **Verify the Report Downloads**
-
-To ensure everything is working as expected, you can run the report download examples from the scripts in the **Back End** directory. For example, run one of the Python files like `example1.py` to test if the report download process works as expected.
-
-```bash
-python Back\ End/Example1/example1.py
-```
-
-### 9. **Stop the Flask Server**
-
-When you're done, you can stop the Flask server by pressing `CTRL+C` in the terminal where it is running.
